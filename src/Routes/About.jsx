@@ -1,8 +1,9 @@
+import contentImg from './../assets/images/content.png';
 export default function About() {
 	return (
 		<main className="about-main">
 			<section className="img">
-				<img src="./assets/images/content.png" alt="Van and solace" />
+				<img src={contentImg} alt="Van and solace" />
 			</section>
 			<section className="intro">
 				<h2>Don&apos;t squeeze in a sedan when you could relax in a van.</h2>
