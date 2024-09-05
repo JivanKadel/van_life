@@ -42,7 +42,9 @@ export default function Header() {
 						/>
 					</svg>
 				</Link>
-				<button onClick={fakeLogOut}>X</button>
+				<button onClick={fakeLogOut} style={{ backgroundColor: 'transparent' }}>
+					Logout
+				</button>
 			</div>
 		</nav>
 	);
