@@ -5,17 +5,7 @@ import {
 } from 'react-router-dom';
 
 export default function HostVan({ props }) {
-	const { van, setVans } = props;
-	// const [van, setVan] = useState([]);
-	// const { id } = useParams();
-	// useEffect(() => {
-	// 	fetch(`/api/vans/${id}`)
-	// 		.then((res) => res.json())
-	// 		.then((data) => setVan(data.vans));
-	// }, [id]);
-	if (van.length === 0) {
-		return <h1>Loading...</h1>;
-	}
+	const { van } = props;
 	return (
 		<main className="host-van-detail">
 			<Link to=".." relative="path" className="back-button">

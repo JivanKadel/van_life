@@ -1,24 +1,26 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
-// import React from 'react';
-import { Link } from 'react-router-dom';
-export default function Vans() {
-	const [vans, setVans] = useState([]);
-	useEffect(() => {
-		fetch('/api/vans')
-			.then((res) => res.json())
-			.then((data) => setVans(data.vans.slice(0, 3)));
-	}, []);
+// import { useState } from 'react';
+// import { useEffect } from 'react';
+import { Await, defer, Link, useLoaderData } from 'react-router-dom';
+import { getHostVans } from '../../utils/api';
+import { requireAuth } from '../../utils/utils';
+import { Suspense } from 'react';
 
-	return (
-		<>
-			<h1 className="van-options">Your listed vans</h1>
+export async function loader({ request }) {
+	await requireAuth(request);
+	return defer({ hostVans: getHostVans() });
+}
+
+export default function Vans() {
+	const vansPromise = useLoaderData();
+
+	function displayVans(vans) {
+		return (
 			<main className="host-vans-main">
 				{vans.length > 0 &&
 					vans.map((van) => (
 						<Link
 							key={van.id}
-							to={`/host/vans/${van.id}`}
+							to={van.id}
 							aria-label={`View details for ${van.name},
 							 priced at $${van.price} per day`}
 						>
@@ -34,6 +36,21 @@ export default function Vans() {
 						</Link>
 					))}
 			</main>
+		);
+	}
+	return (
+		<>
+			<Suspense
+				fallback={<h2 style={{ textAlign: 'center' }}>Loading vans...</h2>}
+			>
+				<h1 className="van-options">Your listed vans</h1>
+				<Await
+					resolve={vansPromise.hostVans}
+					errorElement={<h1>Failed to load vans..</h1>}
+				>
+					{displayVans}
+				</Await>
+			</Suspense>
 		</>
 	);
 }

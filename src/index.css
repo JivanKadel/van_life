@@ -30,6 +30,7 @@ body {
 }
 .navbar > .links {
 	display: flex;
+	align-items: center;
 	gap: 2rem;
 }
 .links > a {
@@ -41,6 +42,10 @@ body {
 }
 .navbar a:hover {
 	text-decoration: underline;
+}
+.navbar .size-6 {
+	/* color: black; */
+	width: 30px;
 }
 .home-main {
 	margin-top: 2rem;
@@ -161,6 +166,15 @@ footer {
 	.vans-main {
 		grid-template-columns: auto;
 	}
+	body {
+		padding: 0.3rem;
+	}
+	.navbar {
+		padding: 1.5rem 0.4rem;
+	}
+	.navbar > .links {
+		gap: 1rem;
+	}
 }
 .van-type {
 	background-color: rgb(210, 82, 13);
@@ -170,6 +184,42 @@ footer {
 	text-align: center;
 	border-radius: 5px;
 	text-transform: capitalize;
+}
+
+.filters {
+	border: 2px solid red;
+	padding: 0.5rem 1.5rem;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+}
+.filters button {
+	width: 100px;
+	text-align: center;
+	color: rgb(40, 38, 38);
+	text-decoration: none;
+	background-color: #e9c89f;
+	padding: 0.3rem;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.filters button:nth-child(1):hover {
+	background-color: var(--simple);
+	color: white;
+}
+.filters button:nth-child(2):hover {
+	background-color: var(--luxury);
+	color: white;
+}
+.filters button:nth-child(3):hover {
+	background-color: var(--rugged);
+	color: white;
+}
+
+button.clear-filter {
+	background-color: transparent;
+	text-decoration: underline;
 }
 
 /* Van details */
@@ -264,7 +314,8 @@ a.active-link {
 	background-color: #fff7ed;
 	padding: 1rem;
 }
-.host-van-detail > .back-button {
+.host-van-detail > .back-button,
+.van-main > .back-button {
 	background-color: transparent;
 	color: black;
 	text-decoration: none;
@@ -347,4 +398,43 @@ a.active-link {
 }
 .host-van-image img:hover {
 	transform: scale(2) translate(25%, -10%);
+}
+
+/* Login form*/
+.login-container {
+	background-color: #fff7ed;
+	padding: 2rem 1rem;
+}
+.login-container > h1 {
+	text-align: center;
+}
+.login-container form {
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
+	gap: 0.4rem;
+}
+.login-container form input {
+	font-size: 1.3rem;
+	padding: 0.3rem;
+	border: 1px solid lightgray;
+	border-radius: 5px;
+}
+.login-container form input::placeholder {
+	font-size: 0.9rem;
+}
+.login-container form button {
+	cursor: pointer;
+	font-size: 1.4rem;
+	font-family: Arial, sans-serif;
+	padding: 0.5rem;
+	background-color: #ff8c38;
+	color: white;
+	margin-top: 1rem;
+	border: 2px solid #ff8c38;
+	border-radius: 5px;
+}
+.login-container form button:disabled {
+	background-color: gray;
+	border: 2px solid gray;
 }

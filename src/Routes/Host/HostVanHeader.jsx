@@ -1,18 +1,23 @@
-import { NavLink, Outlet, useParams } from 'react-router-dom';
+import {
+	NavLink,
+	Outlet,
+	useLoaderData
+	//  useParams
+} from 'react-router-dom';
 import HostVan from './HostVan';
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
+import { getHostVans } from '../../utils/api';
+import { requireAuth } from '../../utils/utils';
 
+export async function loader({ params, request }) {
+	await requireAuth(request);
+	return getHostVans(params.id);
+}
 export default function HostVanHeader() {
-	const [van, setVan] = useState([]);
-	const { id } = useParams();
-	useEffect(() => {
-		fetch(`/api/vans/${id}`)
-			.then((res) => res.json())
-			.then((data) => setVan(data.vans));
-	}, [id]);
+	const van = useLoaderData();
 	return (
 		<div>
-			<HostVan props={{ van, setVan }} />
+			<HostVan props={{ van }} />
 			<HostVanNav />
 			<Outlet context={{ van }} />
 		</div>

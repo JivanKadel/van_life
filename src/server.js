@@ -1,8 +1,9 @@
-import { createServer, Model } from 'miragejs';
+import { createServer, Model, Response } from 'miragejs';
 
 createServer({
 	models: {
-		vans: Model
+		vans: Model,
+		users: Model
 	},
 
 	seeds(server) {
@@ -14,7 +15,8 @@ createServer({
 				'The Modest Explorer is a van designed to get you out of the house and into nature. This beauty is equipped with solar panels, a composting toilet, a water tank and kitchenette. The idea is that you can pack up your home and escape for a weekend or even longer!',
 			imageUrl:
 				'https://assets.scrimba.com/advanced-react/react-router/modest-explorer.png',
-			type: 'simple'
+			type: 'simple',
+			hostId: '123'
 		});
 		server.create('van', {
 			id: '2',
@@ -34,7 +36,8 @@ createServer({
 				"Reliable Red is a van that was made for travelling. The inside is comfortable and cozy, with plenty of space to stretch out in. There's a small kitchen, so you can cook if you need to. You'll feel like home as soon as you step out of it.",
 			imageUrl:
 				'https://assets.scrimba.com/advanced-react/react-router/reliable-red.png',
-			type: 'luxury'
+			type: 'luxury',
+			hostId: '123'
 		});
 		server.create('van', {
 			id: '4',
@@ -64,20 +67,62 @@ createServer({
 				"With this van, you can take your travel life to the next level. The Green Wonder is a sustainable vehicle that's perfect for people who are looking for a stylish, eco-friendly mode of transport that can go anywhere.",
 			imageUrl:
 				'https://assets.scrimba.com/advanced-react/react-router/green-wonder.png',
-			type: 'rugged'
+			type: 'rugged',
+			hostId: '123'
+		});
+		server.create('user', {
+			id: '123',
+			email: 'jivan@mail.com',
+			password: 'password',
+			name: 'jivan'
 		});
 	},
 
 	routes() {
 		this.namespace = 'api';
-
+		this.timing = 1000;
+		
 		this.get('/vans', (schema) => {
+			// return new Response(400, {}, { error: 'Error fetching data' });
 			return schema.vans.all();
 		});
 
 		this.get('/vans/:id', (schema, request) => {
 			const id = request.params.id;
 			return schema.vans.find(id);
+		});
+
+		this.get('/host/vans', (schema, request) => {
+			// Hard-code the hostId for now
+			return schema.vans.where({ hostId: '123' });
+		});
+
+		this.get('/host/vans/:id', (schema, request) => {
+			// Hard-code the hostId for now
+			const id = request.params.id;
+			return schema.vans.findBy({ id });
+		});
+
+		this.post('/login', (schema, request) => {
+			const { email, password } = JSON.parse(request.requestBody);
+			// This is an extremely naive version of authentication. Please don't
+			// do this in the real world, and never save raw text passwords
+			// in your database 😇
+			const foundUser = schema.users.findBy({ email, password });
+			if (!foundUser) {
+				return new Response(
+					401,
+					{},
+					{ message: 'No user with those credentials found!' }
+				);
+			}
+
+			// At the very least, don't send the password back to the client 😅
+			foundUser.password = undefined;
+			return {
+				user: foundUser,
+				token: "Enjoy your pizza, here's your tokens."
+			};
 		});
 	}
 });

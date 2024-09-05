@@ -1,17 +1,31 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+// import { useEffect, useState } from 'react';
+import {
+	Link,
+	useLoaderData,
+	useLocation
+	// useParams
+} from 'react-router-dom';
+import getVans from './../../utils/api';
+// import { requireAuth } from '../../utils/utils';
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function loader({ params }) {
+	// await requireAuth();
+	return getVans(params.id);
+}
 
 export default function VanDetails() {
-	const [van, setVan] = useState(null);
-	const { id } = useParams();
-	useEffect(() => {
-		fetch(`/api/vans/${id}`)
-			.then((res) => res.json())
-			.then((data) => setVan(data.vans));
-	}, [id]);
+	const van = useLoaderData();
 
-	return van ? (
+	const filter = useLocation().state?.filter || '';
+
+	const type = useLocation().state?.type || 'all';
+
+	return (
 		<main className="van-main van-details-page">
+			<Link to={`..?${filter}`} relative="path" className="back-button">
+				&larr; <span>Back to {type} vans</span>
+			</Link>
 			<div className="van-details-card">
 				<img src={van.imageUrl} alt="" className="van-image" />
 				<p
@@ -26,7 +40,5 @@ export default function VanDetails() {
 				<button className="rent-van-btn">Rent this van</button>
 			</div>
 		</main>
-	) : (
-		<h2>Loading...</h2>
 	);
 }
